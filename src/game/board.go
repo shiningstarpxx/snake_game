@@ -2,8 +2,13 @@ package game
 
 import (
 	"fmt"
+	"image/color"
 	"math/rand"
 	"time"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/shiningstarpxx/snake_game/src/utils"
 )
 
 const (
@@ -12,12 +17,16 @@ const (
 )
 
 type Board struct {
-	grid [][]int
+	grid   [][]int
+	Width  int
+	Height int
 }
 
 func NewBoard() *Board {
 	board := &Board{
-		grid: make([][]int, boardHeight),
+		grid:   make([][]int, boardHeight),
+		Width:  utils.ScreenWidth / utils.SnakeSize,
+		Height: utils.ScreenHeight / utils.SnakeSize,
 	}
 	for i := range board.grid {
 		board.grid[i] = make([]int, boardWidth)
@@ -58,4 +67,25 @@ func (b *Board) SpawnFood() {
 	}
 
 	b.grid[y][x] = 2 // Place food
+}
+
+func (b *Board) Draw(screen *ebiten.Image) {
+	// Draw the background
+	bgColor, _ := ParseHexColor(utils.BackgroundColor)
+	screen.Fill(bgColor)
+
+	// Draw grid lines (optional)
+	gridColor := color.RGBA{40, 40, 40, 255} // Dark grey
+
+	// Draw vertical grid lines
+	for x := 0; x < b.Width; x++ {
+		xPos := float64(x * utils.SnakeSize)
+		ebitenutil.DrawLine(screen, xPos, 0, xPos, float64(utils.ScreenHeight), gridColor)
+	}
+
+	// Draw horizontal grid lines
+	for y := 0; y < b.Height; y++ {
+		yPos := float64(y * utils.SnakeSize)
+		ebitenutil.DrawLine(screen, 0, yPos, float64(utils.ScreenWidth), yPos, gridColor)
+	}
 }
