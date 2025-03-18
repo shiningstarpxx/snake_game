@@ -1,33 +1,34 @@
 package main
 
 import (
-    "fmt"
-    "github.com/yourusername/snake-game/src/game"
-    "github.com/yourusername/snake-game/src/ui"
-    "github.com/yourusername/snake-game/src/utils"
-    "time"
+	"fmt"
+	"time"
+
+	"github.com/shiningstarpxx/snake_game/src/game"
+	"github.com/shiningstarpxx/snake_game/src/ui"
+	"github.com/shiningstarpxx/snake_game/src/utils"
 )
 
 func main() {
-    board := game.NewBoard()
-    snake := game.NewSnake()
-    food := game.NewFood()
+	board := game.NewBoard()
+	snake := game.NewSnake()
+	food := game.NewFood()
 
-    ui.Initialize()
+	ui.Initialize()
 
-    for {
-        ui.Render(board, snake, food)
-        snake.Move()
-        
-        if snake.CheckCollision(board) {
-            fmt.Println("Game Over!")
-            break
-        }
+	for {
+		ui.Render(board, snake, food)
+		snake.Move()
 
-        if snake.Eat(food) {
-            food.Spawn(board)
-        }
+		if snake.CheckCollision(board) {
+			fmt.Println("Game Over!")
+			break
+		}
 
-        time.Sleep(time.Millisecond * utils.GameSpeed)
-    }
+		if snake.Eat(food) {
+			food.Spawn(board)
+		}
+
+		time.Sleep(time.Millisecond * utils.GameSpeed)
+	}
 }
